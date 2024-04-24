@@ -45,11 +45,11 @@ resource "aws_instance" "rabbitmq" {
   user_data = base64encode("${path.module}/userdata.sh")
 }
 
-resource "aws_route53_record" "dnsrecord" {
-  zone_id = var.zone_id
-  name    = "rabbitmq-${var.env}"
-  type    = "A"
-  ttl     = 30
-  records = [aws_instance.rabbitmq.private_ip]
-}
-#"Z01307132WU1DJMGVKGO6"
+#resource "aws_route53_record" "dnsrecord" {
+#  zone_id = var.zone_id
+#  name    = "rabbitmq-${var.env}"
+#  type    = "A"
+#  ttl     = 30
+#  records = [aws_instance.rabbitmq.private_ip]
+#}
+##"Z01307132WU1DJMGVKGO6"
