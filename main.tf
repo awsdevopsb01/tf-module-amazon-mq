@@ -12,7 +12,7 @@ resource "aws_security_group" "main" {
   }
 
   ingress {
-    description      = "app"
+    description      = "ssh"
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
@@ -23,13 +23,11 @@ resource "aws_security_group" "main" {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
-    #  cidr_blocks      = ["0.0.0.0/0"]
+    cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = {
-    Name = "${var.name}-${var.env}-sg"
-  }
+  tags = merge(var.tags, {Name="${var.env}-${var.name}-instance" })
 }
 
 resource "aws_instance" "rabbitmq" {
@@ -46,11 +44,10 @@ resource "aws_instance" "rabbitmq" {
   user_data = base64encode("${path.module}/userdata.sh")
 }
 
-#resource "aws_route53_record" "dnsrecord" {
-#  zone_id = var.zone_id
-#  name    = "rabbitmq-${var.env}"
-#  type    = "A"
-#  ttl     = 30
-#  records = [aws_instance.rabbitmq.private_ip]
-#}
-##"Z01307132WU1DJMGVKGO6"
+resource "aws_route53_record" "dnsrecord" {
+  zone_id = var.domain_id
+  name    = "rabbitmq-${var.env}"
+  type    = "A"
+  ttl     = 30
+  records = [aws_instance.rabbitmq.private_ip]
+}

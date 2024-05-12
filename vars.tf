@@ -12,3 +12,4 @@ variable "subnets" {}
 variable "vpc_id" {}
 variable "instance_type" {}
 variable "bastion_cidr" {}
+variable "domain_id" {}
